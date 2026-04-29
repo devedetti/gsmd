@@ -1,0 +1,13 @@
+{
+  "cpe_host": "192.168.2.4",
+  "cpe_user": "admin",
+  "cpe_pass": "CHANGE_ME",
+  "listen": ":8080",
+  "rate_limit_per_min": 30,
+  "rate_limit_burst": 5,
+  "tokens": {
+    "ha":      "CHANGE_ME_64_HEX_CHARS_FROM_openssl_rand_hex_32",
+    "grafana": "CHANGE_ME_64_HEX_CHARS_DISTINCT",
+    "manual":  "CHANGE_ME_64_HEX_CHARS_DISTINCT"
+  }
+}

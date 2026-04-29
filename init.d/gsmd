@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+name="gsmd"
+description="ZTE CPE SMS gateway daemon"
+
+command="/usr/local/bin/gsmd"
+command_args="-config /etc/gsmd.conf"
+command_user="gsmd:gsmd"
+
+supervisor="supervise-daemon"
+respawn_delay=5
+respawn_max=0
+
+output_log="/var/log/gsmd/gsmd.log"
+error_log="/var/log/gsmd/gsmd.err"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    checkpath -d -m 0750 -o gsmd:gsmd /var/log/gsmd
+}
