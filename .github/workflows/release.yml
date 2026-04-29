@@ -1,0 +1,44 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
+
+      - name: Test
+        run: go test ./...
+
+      - name: Build (linux/amd64, static)
+        env:
+          CGO_ENABLED: 0
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go build -trimpath -ldflags="-s -w" \
+            -o "gsmd-${GITHUB_REF_NAME}-linux-amd64" .
+          cp init.d/gsmd gsmd.openrc
+
+      - name: Checksums
+        run: sha256sum gsmd-*-linux-amd64 gsmd.openrc gsmd.conf.example > SHA256SUMS
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            gsmd-*-linux-amd64
+            gsmd.openrc
+            gsmd.conf.example
+            SHA256SUMS
